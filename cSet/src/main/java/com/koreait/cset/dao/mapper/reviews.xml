@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- DAO가 들어간다 -->
+<mapper namespace="com.koreait.cset.dao.ReviewsDAO">
+	<!-- RLIKE 일단 생략함 -->
+	<select id="selectReviewsProductsList" resultType="com.koreait.cset.dto.ReviewsDTO">
+		SELECT PNO 
+		FROM REVIEWS
+		ORDER BY PNO DESC
+	</select>
+	
+	<select id="selectReviewsList" resultType="com.koreait.cset.dto.ReviewsDTO">
+		SELECT RNO, MID, RCONTENT, RFILENAME, RREGDATE, RRATING
+		FROM REVIEWS
+		WHERE PNO = #{pNo}
+		ORDER BY RNO DESC
+	</select>
+	
+	
+	<select id="selectByrNo" resultType="com.koreait.cset.dto.ReviewsDTO">
+		SELECT 	RNO, PNO, MID, RCONTENT, RFILENAME, RRATING, RREGDATE
+		FROM REVIEWS
+		WHERE RNO = #{rNo}
+	</select>
+	
+	<update id="updateReviews">
+		UPDATE REVIEWS
+		SET RCONTENT = #{param1}, RFILENAME = #{param2}, RRATING = #{param3}
+		WHERE RNO = #{param4}
+	</update>
+	
+	<delete id="deleteReviews">
+		DELETE FROM REVIEWS
+		WHERE RNO = #{param1}
+	</delete>
+	
+	<select id="selectBypNo" resultType="com.koreait.cset.dto.ReviewsDTO">
+		SELECT PNO
+		FROM REVIEWS
+		WHERE RNO = #{pNo}
+	</select>
+	
+	<insert id="insertReviews" >
+		INSERT INTO REVIEWS (RNO, PNO, MID, RCONTENT, 
+			<if test="param4 != null || param4 != ''">
+				RFILENAME, 
+			</if>
+			RRATING, RREGDATE)
+		VALUES (REVIEWS_SEQ.NEXTVAL,#{param1}, #{param2}, #{param3},
+			<if test="param4 != null || param4 != ''">
+				#{param4},
+			</if> 
+			#{param5}, SYSDATE)
+		
+	</insert>
+</mapper>
